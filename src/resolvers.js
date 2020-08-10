@@ -1,19 +1,19 @@
 const resolvers = {
     Query: {
         async order(root, { id }, { models }) {
-            return models.Order.findById(id)
+            return models.orders.findById(id)
         },
         async allOrders(root, args, { models }) {
-            return models.Order.findAll()
+            return models.orders.findAll()
         },
         async product(root, { id }, { models }) {
-            return models.Product.findById(id)
+            return models.products.findById(id)
         },
         async allCategories(root, { id }, { models }) {
-            return models.Categories.findAll()
+            return models.categories.findAll()
         },
         async allMessages(root, { id }, { models }) {
-            return models.Recipe.findById(id)
+            return models.messages.findById()
         }
     },
 }
