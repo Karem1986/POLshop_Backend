@@ -1,10 +1,8 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "database_development",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "url": "postgres://rcawepnf:Dg5aB09CJFnBCa_1nZFFshaN5uwl3z9P@kandula.db.elephantsql.com:5432/rcawepnf",
+    "dialect": "postgres",
+    "operatorsAliases": "0"
   },
   "test": {
     "username": "root",
