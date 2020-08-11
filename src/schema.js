@@ -7,13 +7,15 @@ const typeDefs = gql`
         name: String!
         email: String!
         admin: Boolean 
-        password: [Password!]!
+        password: String!
+        orders: [Orders]!
       }
 
     type Order {
         id: Int!
         date: Date!
         order: Product!
+        user: User!
     }
 
     type Product {
@@ -35,10 +37,12 @@ const typeDefs = gql`
 
     type Query {
         order(id: Int!): Order
-        allOrders: [Order!]!
         product(id: Int!): Product
+        user(id: Int): User
+        allOrders: [Order!]!
         allCategories: [Categories]
         allMessages: [Messages]
+        allUsers: [User]
     }
 
     type Mutation {
