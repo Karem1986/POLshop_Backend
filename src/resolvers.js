@@ -4,13 +4,16 @@ const bcrypt = require('bcryptjs')
 const resolvers = {
     Query: {
         async user(root, { id }, { models }) {
-            return models.users.findById(id)
+            return models.User.findById(id)
         },
         async order(root, { id }, { models }) {
             return models.orders.findById(id)
         },
         async product(root, { id }, { models }) {
             return models.products.findById(id)
+        },
+        async allProducts(root, args, { models }) {
+            return models.products.findAll()
         },
         async allOrders(root, args, { models }) {
             return models.orders.findAll()
@@ -19,16 +22,20 @@ const resolvers = {
             return models.categories.findAll()
         },
         async allMessages(root, args, { models }) {
-            return models.messages.findByAll()
+            return models.messages.findAll()
         },
         async allUsers(root, args, { models }) {
-            return models.users.findByAll()
+            console.log('user')
+            //is the naming the issue? 
+            console.log('models user testing', models)
+            return models.user.findAll()
+
         }
     },
     //Mutations below for creating a new user and a new order:
     Mutation: {
         async createUser(root, { name, email, password }, { models }) {
-            return models.users.create({
+            return models.User.create({
                 name,
                 email,
                 admin,
@@ -36,10 +43,9 @@ const resolvers = {
             })
         },
         async createOrder(root, { userId }, { models }) {
-            return models.orders.create({ userId, productId })
+            return models.Order.create({ userId, productId })
         }
     },
-
 
     User: {
         async orders(user) {
@@ -51,8 +57,6 @@ const resolvers = {
             return product.getProducts()
         }
     }
-
-
 }
 
 module.exports = resolvers

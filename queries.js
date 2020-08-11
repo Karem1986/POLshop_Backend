@@ -12,6 +12,14 @@ const User = require("./models").user
 
 // getAllOrders()
 
+const getAllUsers = async () => {
+    const allmyusers = await User.findAll();
+    const plainUsers = allmyusers.map(o => o.get({ plain: true }))
+    console.log(plainUsers)
+}
+
+getAllUsers()
+
 //Find an order by id:
 // async function getOrderById(key) {
 //     const orderById = await Order.findByPk(key)
@@ -21,11 +29,11 @@ const User = require("./models").user
 
 //Find an order by id including products 
 //Order.findByPk(id, { include: Product })
-const getOrderByIdWithProducts = async (key) => {
-    const orderByIdWithProducts = await Order.findByPk(key, { include: [Product] });
-    // const plainOrders = orderByIdWithProducts.map(o => o.get({ plain: true }));
-    console.log(orderByIdWithProducts);
-    return orderByIdWithProducts
-};
-//Test in terminal: node queries.js
-getOrderByIdWithProducts(1).then(order => console.log("This is order:", order.toJSON()));
+// const getOrderByIdWithProducts = async (key) => {
+//     const orderByIdWithProducts = await Order.findByPk(key, { include: [Product] });
+//     // const plainOrders = orderByIdWithProducts.map(o => o.get({ plain: true }));
+//     console.log(orderByIdWithProducts);
+//     return orderByIdWithProducts
+// };
+// //Test in terminal: node queries.js
+// getOrderByIdWithProducts(1).then(order => console.log("This is order:", order.toJSON()));

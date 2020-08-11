@@ -1,14 +1,15 @@
-
 const { gql } = require('apollo-server')
 
+
 const typeDefs = gql`
+    scalar Date
     type User {
         id: Int!
         name: String!
         email: String!
         admin: Boolean 
         password: String!
-        orders: [Orders]!
+        orders: [Order]!
       }
 
     type Order {
@@ -21,7 +22,7 @@ const typeDefs = gql`
     type Product {
         id: Int!
         name: String!
-        imageUrl: Text! 
+        imageUrl: String! 
        
     }
     type Category {
@@ -40,27 +41,15 @@ const typeDefs = gql`
         product(id: Int!): Product
         user(id: Int): User
         allOrders: [Order!]!
-        allCategories: [Categories]
+        allCategories: [Category]
         allMessages: [Messages]
         allUsers: [User]
+        allProducts: [Product]
     }
 
     type Mutation {
         createUser(name: String!, email: String!, password: String!): User!
-        createUser(
-          userId: Int!
-          name: String!
-          email: String!
-          password: String!
-        ): User!
-    }
-    type Mutation {
         createOrder(name: String!, email: String!, password: String!): Order!
-        createOrder(
-          productId: Int!
-          name: String!
-          price: String!
-        ): Order!
     }
 `
 
