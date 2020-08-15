@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         through: "orderproducts", //join table name here
         foreignKey: "productId"
       })
+      products.hasMany(models.review)
 
     }
   };

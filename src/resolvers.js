@@ -4,13 +4,23 @@ const bcrypt = require('bcryptjs')
 const resolvers = {
     Query: {
         async user(root, { id }, { models }) {
-            return models.User.findById(id)
+            return models.user.findByPk(id)
         },
         async order(root, { id }, { models }) {
-            return models.orders.findById(id)
+            return models.orders.findByPk(id)
         },
         async product(root, { id }, { models }) {
-            return models.products.findById(id)
+            return models.products.findByPk(id)
+        },
+        async review(root, { id }, { models }) {
+            return models.review.findByPk(id)
+        },
+        async arrayProducts(root, { containsIds }, { models }) {
+            return models.products.findAll({
+                where: {
+                    id: containsIds
+                }
+            })
         },
         async allProducts(root, args, { models }) {
             return models.products.findAll()
@@ -31,11 +41,12 @@ const resolvers = {
             return models.user.findAll()
 
         }
+
     },
-    //Mutations below for creating a new user and a new order:
+    //Mutations below for creating a new user, new order and a review
     Mutation: {
         async createUser(root, { name, email, password }, { models }) {
-            return models.User.create({
+            return models.user.create({
                 name,
                 email,
                 admin,
@@ -43,7 +54,35 @@ const resolvers = {
             })
         },
         async createOrder(root, { userId }, { models }) {
-            return models.Order.create({ userId, productId })
+            return models.orders.create({ userId, productId })
+        },
+        async createReview(root, { userId, productId, title, comment }, { models }) {
+            return models.review.create({ userId, productId, title, comment })
+        },
+        async signup(root, { email, password, name }) {
+            // 1
+            const password = await bcrypt.hash(password, 10)
+
+            // 2
+            const user = await models.user.create({ data: { email, password, name } })
+
+            // 3
+            const token = jwt.sign({ userId: user.id }, "testing")
+
+            // 4
+            return {
+                token,
+                user,
+            }
+        }
+
+
+    },
+
+
+    Product: {
+        async review(product) {
+            return product.getReviews()
         }
     },
 

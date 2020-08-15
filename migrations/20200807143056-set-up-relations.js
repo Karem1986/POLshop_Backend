@@ -50,6 +50,7 @@ module.exports = {
     await queryInterface.removeColumn("orderproducts", "orderId");
     await queryInterface.removeColumn("orderproducts", "productId");
 
+
   },
 
 };
