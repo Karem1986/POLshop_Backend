@@ -1,7 +1,6 @@
 const { gql } = require('apollo-server')
 
 
-
 const typeDefs = gql`
     scalar Date
     type User {
@@ -46,14 +45,18 @@ const typeDefs = gql`
        
     }
 
-    type Tokens {
-    accessToken: String
-    refreshToken: String
-  }
-  
+
   type AuthPayload {
-  token: String
-  user: User
+  name: String
+  email: String!
+  admin: Boolean
+ password: String!
+ 
+}
+type Tokens {
+   user: User
+   token: String 
+   error: String
 }
 
     type Query {
@@ -67,14 +70,16 @@ const typeDefs = gql`
         allUsers: [User]
         allProducts: [Product]
         arrayProducts(containsIds:[Int]): [Product] 
+        getUser(token: String) : Tokens
+        refreshUser(token: String):Tokens
     }
 
     type Mutation {
         createUser(name: String!, email: String!, password: String!): User!
         createOrder(name: String!, email: String!, password: String!): Order!
         createReview(title: String!, comment: String! userId: Int!, productId: Int!): Review! 
-        signup(email: String!, password: String!, name: String!): AuthPayload
-        # login(username: String, password: String!): Tokens
+        signup(email: String!, password: String!, name: String!, admin: Boolean): AuthPayload
+        login( name: String, email: String, password: String!): Tokens
 
     }
 `

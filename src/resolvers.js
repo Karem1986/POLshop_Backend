@@ -1,6 +1,9 @@
 
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const user = require('../models').user
+const order = require('../models').orders
+const review = require('../models').review
 
 const resolvers = {
     Query: {
@@ -41,18 +44,27 @@ const resolvers = {
             console.log('models user testing', models)
             return models.user.findAll()
 
+        },
+        async getUser(root, { token }, { models }) {
+            const userId = jwt.verify(token, "Cat")
+            const customer = await models.user.findByPk(userId.id);
+            if (customer) {
+                return { customer, token };
+            } else if (!customer) {
+                return { error: "token expired" };
+            }
         }
 
     },
     //Mutations below for creating a new user, new order and a review
     Mutation: {
-        async signup(root, { name, email, password }, { models }) {
-            const token = jwt.sign({ userId: user.id }, "testing")
-            return models.user.create({
+        async signup(root, { name, email, password, admin }, { models }) {
+            const token = jwt.sign({ userId: user.id }, "Cat")
+            return await models.user.create({
                 name,
                 email,
-                admin,
                 token,
+                admin,
                 password: await bcrypt.hash(password, 10),
 
             })
@@ -63,23 +75,39 @@ const resolvers = {
         async createReview(root, { userId, productId, title, comment }, { models }) {
             return models.review.create({ userId, productId, title, comment })
         },
-        // async signup(root, { email, password, name }) {
-        //     // 1
-        //     const password = await bcrypt.hash(password, 10)
+        async login(root, { email, password }, { models }) {
+            if (!email || !password) {
+                return {
+                    error: "Provide both email and password",
+                };
+            }
 
-        //     // 2
-        //     const user = await models.user.create({ data: { email, password, name } })
+            try {
+                const customer = await models.user.findOne({ where: { email } });
 
-        //     // 3
-        //     const token = jwt.sign({ userId: user.id }, "testing")
+                if (!customer || !bcrypt.compareSync(password, customer.password)) {
+                    console.log('password do not match')
+                    return {
+                        error: "User with that email not found or password incorrect",
+                    };
+                }
 
-        //     // 4
-        //     return {
-        //         token,
-        //         user,
-        //     }
-        // }
+                const token = jwt.sign(
+                    { id: customer.id },
+                    "Cat",
+                    { expiresIn: "1h" }
+                );
+                return { user: { ...customer.dataValues }, token }
+                // return { customer, token };
+                // console.log('customer', customer, token)
 
+
+            } catch (err) {
+                return {
+                    error: err,
+                };
+            }
+        },
 
     },
 

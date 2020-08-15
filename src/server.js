@@ -3,7 +3,7 @@ const typeDefs = require('./schema')
 const resolvers = require('./resolvers')
 const models = require('../models')
 // const cors = require('cors')
-
+require('dotenv').config()
 
 const server = new ApolloServer({
     typeDefs,
