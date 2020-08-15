@@ -1,5 +1,6 @@
 
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 const resolvers = {
     Query: {
@@ -45,12 +46,15 @@ const resolvers = {
     },
     //Mutations below for creating a new user, new order and a review
     Mutation: {
-        async createUser(root, { name, email, password }, { models }) {
+        async signup(root, { name, email, password }, { models }) {
+            const token = jwt.sign({ userId: user.id }, "testing")
             return models.user.create({
                 name,
                 email,
                 admin,
-                password: await bcrypt.hash(password, 10)
+                token,
+                password: await bcrypt.hash(password, 10),
+
             })
         },
         async createOrder(root, { userId }, { models }) {
@@ -59,22 +63,22 @@ const resolvers = {
         async createReview(root, { userId, productId, title, comment }, { models }) {
             return models.review.create({ userId, productId, title, comment })
         },
-        async signup(root, { email, password, name }) {
-            // 1
-            const password = await bcrypt.hash(password, 10)
+        // async signup(root, { email, password, name }) {
+        //     // 1
+        //     const password = await bcrypt.hash(password, 10)
 
-            // 2
-            const user = await models.user.create({ data: { email, password, name } })
+        //     // 2
+        //     const user = await models.user.create({ data: { email, password, name } })
 
-            // 3
-            const token = jwt.sign({ userId: user.id }, "testing")
+        //     // 3
+        //     const token = jwt.sign({ userId: user.id }, "testing")
 
-            // 4
-            return {
-                token,
-                user,
-            }
-        }
+        //     // 4
+        //     return {
+        //         token,
+        //         user,
+        //     }
+        // }
 
 
     },
