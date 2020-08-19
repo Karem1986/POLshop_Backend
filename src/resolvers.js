@@ -94,17 +94,19 @@ const resolvers = {
           return {
             error: "User with that email not found or password incorrect",
           };
+        } else {
+          const token = jwt.sign(
+            { id: customer.id },
+            "Cat",
+            { expiresIn: "1h" }
+            // function (err, token) {
+            //   console.log("token", token);
+            //   return { user: { ...customer.dataValues }, token };
+            // }
+          );
+          console.log("token", token);
+          return { user: { ...customer.dataValues }, token };
         }
-
-        const token = jwt.sign(
-          { id: customer.id },
-          "Cat",
-          { expiresIn: "1h" },
-          function (err, token) {
-            console.log("token", token);
-            return { user: { ...customer.dataValues }, token };
-          }
-        );
       } catch (err) {
         return {
           error: err,
@@ -122,14 +124,17 @@ const resolvers = {
       return paymentIntent;
     },
     async isLoggedIn(root, { token }) {
+      console.log("token", token);
       if (!token) {
         return false;
       }
       try {
         const decodedToken = jwt.verify(token, "Cat");
         console.log("decoded token", decodedToken);
+        return true;
       } catch (e) {
         console.log(e);
+        return false;
       }
     },
   },
