@@ -96,10 +96,15 @@ const resolvers = {
           };
         }
 
-        const token = jwt.sign({ id: customer.id }, "Cat", { expiresIn: "1h" });
-        return { user: { ...customer.dataValues }, token };
-        // return { customer, token };
-        // console.log('customer', customer, token)
+        const token = jwt.sign(
+          { id: customer.id },
+          "Cat",
+          { expiresIn: "1h" },
+          function (err, token) {
+            console.log("token", token);
+            return { user: { ...customer.dataValues }, token };
+          }
+        );
       } catch (err) {
         return {
           error: err,
@@ -119,6 +124,12 @@ const resolvers = {
     async isLoggedIn(root, { token }) {
       if (!token) {
         return false;
+      }
+      try {
+        const decodedToken = jwt.verify(token, "Cat");
+        console.log("decoded token", decodedToken);
+      } catch (e) {
+        console.log(e);
       }
     },
   },
