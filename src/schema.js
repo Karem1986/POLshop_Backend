@@ -48,8 +48,8 @@ const typeDefs = gql`
     password: String!
   }
   type Tokens {
-    user: User
-    token: String
+    user: User!
+    token: String!
     error: String
   }
   type Payment {
@@ -86,7 +86,7 @@ const typeDefs = gql`
       name: String!
       admin: Boolean
     ): AuthPayload
-    login(name: String, email: String, password: String!): Tokens
+    login(email: String!, password: String!): Tokens
     createpayment(amount: Int): Payment
     isLoggedIn(token: String): Boolean
   }
