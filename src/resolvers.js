@@ -99,10 +99,7 @@ const resolvers = {
             { id: customer.id },
             "Cat",
             { expiresIn: "1h" }
-            // function (err, token) {
-            //   console.log("token", token);
-            //   return { user: { ...customer.dataValues }, token };
-            // }
+        
           );
           console.log("token", token);
           return { user: { ...customer.dataValues }, token };
