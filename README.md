@@ -4,7 +4,7 @@
 
 POLshop server has been built with the following stack:🔨🧰
 
-Sequelize as an ORM, Apollo server, GraphQL
+Sequelize as ORM, Apollo server, GraphQL
 
 ### Examples of: 
 
