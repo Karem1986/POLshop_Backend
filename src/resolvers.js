@@ -92,15 +92,12 @@ const resolvers = {
         if (!customer || !bcrypt.compareSync(password, customer.password)) {
           console.log("password do not match");
           return {
-            error: "User with that email not found or password incorrect",
+            error: "password incorrect",
           };
         } else {
-          const token = jwt.sign(
-            { id: customer.id },
-            "Cat",
-            { expiresIn: "1h" }
-        
-          );
+          const token = jwt.sign({ id: customer.id }, "Cat", {
+            expiresIn: "1h",
+          });
           console.log("token", token);
           return { user: { ...customer.dataValues }, token };
         }
